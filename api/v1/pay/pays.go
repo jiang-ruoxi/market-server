@@ -9,6 +9,7 @@ import (
     "github.com/flipped-aurora/gin-vue-admin/server/service"
     "github.com/gin-gonic/gin"
     "go.uber.org/zap"
+    "github.com/flipped-aurora/gin-vue-admin/server/utils"
 )
 
 type PaysApi struct {
@@ -33,6 +34,16 @@ func (paysApi *PaysApi) CreatePays(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+    verify := utils.Rules{
+        "Name":{utils.NotEmpty()},
+        "CPrice":{utils.NotEmpty()},
+        "Number":{utils.NotEmpty()},
+        "Type":{utils.NotEmpty()},
+    }
+	if err := utils.Verify(pays, verify); err != nil {
+    		response.FailWithMessage(err.Error(), c)
+    		return
+    	}
 	if err := paysService.CreatePays(&pays); err != nil {
         global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
@@ -105,6 +116,16 @@ func (paysApi *PaysApi) UpdatePays(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+      verify := utils.Rules{
+          "Name":{utils.NotEmpty()},
+          "CPrice":{utils.NotEmpty()},
+          "Number":{utils.NotEmpty()},
+          "Type":{utils.NotEmpty()},
+      }
+    if err := utils.Verify(pays, verify); err != nil {
+      	response.FailWithMessage(err.Error(), c)
+      	return
+     }
 	if err := paysService.UpdatePays(pays); err != nil {
         global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)

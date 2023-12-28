@@ -57,6 +57,9 @@ func (paysService *PaysService)GetPaysInfoList(info payReq.PaysSearch) (list []p
     if info.StartCreatedAt !=nil && info.EndCreatedAt !=nil {
      db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
     }
+    if info.Type != "" {
+        db = db.Where("type = ?",info.Type)
+    }
 	err = db.Count(&total).Error
 	if err!=nil {
     	return
