@@ -70,6 +70,30 @@ func Routers() *gin.Engine {
 	{
 
 	}
+	{
+		tagRouter := router.RouterGroupApp.Tag
+		tagRouter.InitTagsRouter(PrivateGroup)
+	}
+	{
+		bannerRouter := router.RouterGroupApp.Banner
+		bannerRouter.InitBannersRouter(PrivateGroup)
+	}
+	{
+		orderRouter := router.RouterGroupApp.Order
+		orderRouter.InitOrdersRouter(PrivateGroup)
+	}
+	{
+		payRouter := router.RouterGroupApp.Pay
+		payRouter.InitPaysRouter(PrivateGroup)
+	}
+	{
+		taskRouter := router.RouterGroupApp.Task
+		taskRouter.InitTasksRouter(PrivateGroup)
+	}
+	{
+		memberRouter := router.RouterGroupApp.Member
+		memberRouter.InitMembersRouter(PrivateGroup)
+	}
 
 	global.GVA_LOG.Info("router register success")
 	return Router
