@@ -50,22 +50,22 @@ cors:
           expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type
           allow-credentials: true
 db-list:
-    - type: ""
-      alias-name: ""
+    - disable: false
+      type: "mysql"
+      alias-name: "market"
+      path: "127.0.0.1"
+      port: "3306"
+      config: "charset=utf8mb4&parseTime=True&loc=Local"
+      db-name: "market"
+      username: "root"
+      password: "123456"
       prefix: ""
-      port: ""
-      config: ""
-      db-name: ""
-      username: ""
-      password: ""
-      path: ""
+      singular: false
       engine: ""
-      log-mode: ""
       max-idle-conns: 10
       max-open-conns: 100
-      singular: false
+      log-mode: ""
       log-zap: false
-      disable: true
 email:
     to: xxx@qq.com
     from: xxx@163.com
