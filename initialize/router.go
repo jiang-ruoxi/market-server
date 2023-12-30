@@ -79,8 +79,7 @@ func Routers() *gin.Engine {
 		bannerRouter.InitBannersRouter(PrivateGroup)
 	}
 	{
-		orderRouter := router.RouterGroupApp.Order
-		orderRouter.InitOrdersRouter(PrivateGroup)
+
 	}
 	{
 
@@ -99,6 +98,13 @@ func Routers() *gin.Engine {
 	{
 		payRouter := router.RouterGroupApp.Pay
 		payRouter.InitPaysRouter(PrivateGroup)
+	}
+	{
+
+	}
+	{
+		orderRouter := router.RouterGroupApp.Order
+		orderRouter.InitOrdersRouter(PrivateGroup)
 	}
 
 	global.GVA_LOG.Info("router register success")

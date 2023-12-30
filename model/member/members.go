@@ -10,6 +10,7 @@ import (
 // zmUser表 结构体  Members
 type Members struct {
       global.GVA_MODEL
+      UserId  string `json:"userId" form:"userId" gorm:"column:user_id;comment:用户UserId;size:64;"`  //用户UserId
       OpenId  string `json:"openId" form:"openId" gorm:"column:open_id;comment:用户OpendId;size:64;"`  //用户OpendId 
       NickName  string `json:"nickName" form:"nickName" gorm:"column:nick_name;comment:用户昵称;size:64;"`  //用户昵称 
       HeadUrl  string `json:"headUrl" form:"headUrl" gorm:"column:head_url;comment:用户头像;size:255;"`  //用户头像 

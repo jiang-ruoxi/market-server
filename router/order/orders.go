@@ -9,19 +9,19 @@ import (
 type OrdersRouter struct {
 }
 
-// InitOrdersRouter 初始化 zm_order表 路由信息
+// InitOrdersRouter 初始化 zmOrder表 路由信息
 func (s *OrdersRouter) InitOrdersRouter(Router *gin.RouterGroup) {
 	ordersRouter := Router.Group("orders").Use(middleware.OperationRecord())
 	ordersRouterWithoutRecord := Router.Group("orders")
 	var ordersApi = v1.ApiGroupApp.OrderApiGroup.OrdersApi
 	{
-		ordersRouter.POST("createOrders", ordersApi.CreateOrders)   // 新建zm_order表
-		ordersRouter.DELETE("deleteOrders", ordersApi.DeleteOrders) // 删除zm_order表
-		ordersRouter.DELETE("deleteOrdersByIds", ordersApi.DeleteOrdersByIds) // 批量删除zm_order表
-		ordersRouter.PUT("updateOrders", ordersApi.UpdateOrders)    // 更新zm_order表
+		ordersRouter.POST("createOrders", ordersApi.CreateOrders)   // 新建zmOrder表
+		ordersRouter.DELETE("deleteOrders", ordersApi.DeleteOrders) // 删除zmOrder表
+		ordersRouter.DELETE("deleteOrdersByIds", ordersApi.DeleteOrdersByIds) // 批量删除zmOrder表
+		ordersRouter.PUT("updateOrders", ordersApi.UpdateOrders)    // 更新zmOrder表
 	}
 	{
-		ordersRouterWithoutRecord.GET("findOrders", ordersApi.FindOrders)        // 根据ID获取zm_order表
-		ordersRouterWithoutRecord.GET("getOrdersList", ordersApi.GetOrdersList)  // 获取zm_order表列表
+		ordersRouterWithoutRecord.GET("findOrders", ordersApi.FindOrders)        // 根据ID获取zmOrder表
+		ordersRouterWithoutRecord.GET("getOrdersList", ordersApi.GetOrdersList)  // 获取zmOrder表列表
 	}
 }

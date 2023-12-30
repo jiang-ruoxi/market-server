@@ -18,13 +18,13 @@ type OrdersApi struct {
 var ordersService = service.ServiceGroupApp.OrderServiceGroup.OrdersService
 
 
-// CreateOrders 创建zm_order表
+// CreateOrders 创建zmOrder表
 // @Tags Orders
-// @Summary 创建zm_order表
+// @Summary 创建zmOrder表
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body order.Orders true "创建zm_order表"
+// @Param data body order.Orders true "创建zmOrder表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /orders/createOrders [post]
 func (ordersApi *OrdersApi) CreateOrders(c *gin.Context) {
@@ -39,10 +39,9 @@ func (ordersApi *OrdersApi) CreateOrders(c *gin.Context) {
         "OrderId":{utils.NotEmpty()},
         "Type":{utils.NotEmpty()},
         "CPrice":{utils.NotEmpty()},
-        "OPrice":{utils.NotEmpty()},
         "Number":{utils.NotEmpty()},
-        "NumberExt":{utils.NotEmpty()},
         "Status":{utils.NotEmpty()},
+        "PayTime":{utils.NotEmpty()},
     }
 	if err := utils.Verify(orders, verify); err != nil {
     		response.FailWithMessage(err.Error(), c)
@@ -56,13 +55,13 @@ func (ordersApi *OrdersApi) CreateOrders(c *gin.Context) {
 	}
 }
 
-// DeleteOrders 删除zm_order表
+// DeleteOrders 删除zmOrder表
 // @Tags Orders
-// @Summary 删除zm_order表
+// @Summary 删除zmOrder表
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body order.Orders true "删除zm_order表"
+// @Param data body order.Orders true "删除zmOrder表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /orders/deleteOrders [delete]
 func (ordersApi *OrdersApi) DeleteOrders(c *gin.Context) {
@@ -80,13 +79,13 @@ func (ordersApi *OrdersApi) DeleteOrders(c *gin.Context) {
 	}
 }
 
-// DeleteOrdersByIds 批量删除zm_order表
+// DeleteOrdersByIds 批量删除zmOrder表
 // @Tags Orders
-// @Summary 批量删除zm_order表
+// @Summary 批量删除zmOrder表
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.IdsReq true "批量删除zm_order表"
+// @Param data body request.IdsReq true "批量删除zmOrder表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"批量删除成功"}"
 // @Router /orders/deleteOrdersByIds [delete]
 func (ordersApi *OrdersApi) DeleteOrdersByIds(c *gin.Context) {
@@ -104,13 +103,13 @@ func (ordersApi *OrdersApi) DeleteOrdersByIds(c *gin.Context) {
 	}
 }
 
-// UpdateOrders 更新zm_order表
+// UpdateOrders 更新zmOrder表
 // @Tags Orders
-// @Summary 更新zm_order表
+// @Summary 更新zmOrder表
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body order.Orders true "更新zm_order表"
+// @Param data body order.Orders true "更新zmOrder表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /orders/updateOrders [put]
 func (ordersApi *OrdersApi) UpdateOrders(c *gin.Context) {
@@ -125,10 +124,9 @@ func (ordersApi *OrdersApi) UpdateOrders(c *gin.Context) {
           "OrderId":{utils.NotEmpty()},
           "Type":{utils.NotEmpty()},
           "CPrice":{utils.NotEmpty()},
-          "OPrice":{utils.NotEmpty()},
           "Number":{utils.NotEmpty()},
-          "NumberExt":{utils.NotEmpty()},
           "Status":{utils.NotEmpty()},
+          "PayTime":{utils.NotEmpty()},
       }
     if err := utils.Verify(orders, verify); err != nil {
       	response.FailWithMessage(err.Error(), c)
@@ -142,13 +140,13 @@ func (ordersApi *OrdersApi) UpdateOrders(c *gin.Context) {
 	}
 }
 
-// FindOrders 用id查询zm_order表
+// FindOrders 用id查询zmOrder表
 // @Tags Orders
-// @Summary 用id查询zm_order表
+// @Summary 用id查询zmOrder表
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query order.Orders true "用id查询zm_order表"
+// @Param data query order.Orders true "用id查询zmOrder表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /orders/findOrders [get]
 func (ordersApi *OrdersApi) FindOrders(c *gin.Context) {
@@ -166,13 +164,13 @@ func (ordersApi *OrdersApi) FindOrders(c *gin.Context) {
 	}
 }
 
-// GetOrdersList 分页获取zm_order表列表
+// GetOrdersList 分页获取zmOrder表列表
 // @Tags Orders
-// @Summary 分页获取zm_order表列表
+// @Summary 分页获取zmOrder表列表
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query orderReq.OrdersSearch true "分页获取zm_order表列表"
+// @Param data query orderReq.OrdersSearch true "分页获取zmOrder表列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /orders/getOrdersList [get]
 func (ordersApi *OrdersApi) GetOrdersList(c *gin.Context) {
