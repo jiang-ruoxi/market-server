@@ -6,4 +6,3 @@
 server
 log/*
 tmp/*
-vendor/*
