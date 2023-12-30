@@ -2,9 +2,9 @@ package tag
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/tag"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-    tagReq "github.com/flipped-aurora/gin-vue-admin/server/model/tag/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/tag"
+	tagReq "github.com/flipped-aurora/gin-vue-admin/server/model/tag/request"
 )
 
 type TagsService struct {
@@ -40,7 +40,7 @@ func (tagsService *TagsService)UpdateTags(tags tag.Tags) (err error) {
 
 // GetTags 根据id获取zm_tags表记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (tagsService *TagsService)GetTags(id uint) (tags tag.Tags, err error) {
+func (tagsService *TagsService)GetTags(id int) (tags tag.Tags, err error) {
 	err = global.MustGetGlobalDBByDBName("market").Where("id = ?", id).First(&tags).Error
 	return
 }
@@ -68,4 +68,14 @@ func (tagsService *TagsService)GetTagsInfoList(info tagReq.TagsSearch) (list []t
 	
 	err = db.Find(&tagss).Error
 	return  tagss, total, err
+}
+
+// GetTagsInfoList 分页获取zm_tags表记录
+// Author [piexlmax](https://github.com/piexlmax)
+func (tagsService *TagsService)GetTagsInfoListAll() (list []tag.Tags, err error) {
+	db := global.MustGetGlobalDBByDBName("market").Model(&tag.Tags{})
+	var tagss []tag.Tags
+
+	err = db.Find(&tagss).Error
+	return  tagss, err
 }

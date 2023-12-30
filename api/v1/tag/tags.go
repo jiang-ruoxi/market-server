@@ -2,14 +2,14 @@ package tag
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/tag"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-    tagReq "github.com/flipped-aurora/gin-vue-admin/server/model/tag/request"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-    "github.com/flipped-aurora/gin-vue-admin/server/service"
-    "github.com/gin-gonic/gin"
-    "go.uber.org/zap"
-    "github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/tag"
+	tagReq "github.com/flipped-aurora/gin-vue-admin/server/model/tag/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type TagsApi struct {
@@ -183,4 +183,24 @@ func (tagsApi *TagsApi) GetTagsList(c *gin.Context) {
             PageSize: pageInfo.PageSize,
         }, "获取成功", c)
     }
+}
+
+// GetTagsListAll 分页获取zm_tags表列表
+// @Tags Tags
+// @Summary 分页获取zm_tags表列表
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data query tagReq.TagsSearch true "分页获取zm_tags表列表"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /tags/getTagsListAll [get]
+func (tagsApi *TagsApi) GetTagsListAll(c *gin.Context) {
+	if list, err := tagsService.GetTagsInfoListAll(); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+		}, "获取成功", c)
+	}
 }

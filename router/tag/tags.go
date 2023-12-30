@@ -23,5 +23,6 @@ func (s *TagsRouter) InitTagsRouter(Router *gin.RouterGroup) {
 	{
 		tagsRouterWithoutRecord.GET("findTags", tagsApi.FindTags)        // 根据ID获取zm_tags表
 		tagsRouterWithoutRecord.GET("getTagsList", tagsApi.GetTagsList)  // 获取zm_tags表列表
+		tagsRouterWithoutRecord.GET("getTagsListAll", tagsApi.GetTagsListAll)  // 获取zm_tags表列表
 	}
 }
