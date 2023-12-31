@@ -3,8 +3,8 @@ package banner
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/banner"
+	bannerReq "github.com/flipped-aurora/gin-vue-admin/server/model/banner/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-    bannerReq "github.com/flipped-aurora/gin-vue-admin/server/model/banner/request"
 )
 
 type BannersService struct {
@@ -13,6 +13,7 @@ type BannersService struct {
 // CreateBanners 创建zm_banner表记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (bannersService *BannersService) CreateBanners(banners *banner.Banners) (err error) {
+	banners.Image = "https://static.58haha.com/" + banners.Image
 	err = global.MustGetGlobalDBByDBName("market").Create(banners).Error
 	return err
 }
@@ -34,6 +35,7 @@ func (bannersService *BannersService)DeleteBannersByIds(ids request.IdsReq) (err
 // UpdateBanners 更新zm_banner表记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (bannersService *BannersService)UpdateBanners(banners banner.Banners) (err error) {
+	banners.Image = "https://static.58haha.com/" + banners.Image
 	err = global.MustGetGlobalDBByDBName("market").Save(&banners).Error
 	return err
 }
