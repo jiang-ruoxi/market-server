@@ -2,6 +2,7 @@ package example
 
 import (
 	"errors"
+	"fmt"
 	"mime/multipart"
 	"strings"
 
@@ -95,8 +96,16 @@ func (e *FileUploadAndDownloadService) UploadFile(header *multipart.FileHeader, 
 		panic(uploadErr)
 	}
 	s := strings.Split(header.Filename, ".")
+	// 查找最后一个斜杠的位置
+	lastIndex := strings.LastIndex(filePath, "/")
+
+	// 如果找到了斜杠
+	if lastIndex != -1 {
+		// 使用Substring截取斜杠后面的部分
+		filePath = filePath[lastIndex+1:]
+	}
 	f := example.ExaFileUploadAndDownload{
-		Url:  filePath,
+		Url:  fmt.Sprintf("https://oss.58haha.com/market/system/%s",filePath),
 		Name: header.Filename,
 		Tag:  s[len(s)-1],
 		Key:  key,
