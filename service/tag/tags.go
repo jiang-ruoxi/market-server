@@ -13,7 +13,7 @@ type TagsService struct {
 // CreateTags 创建zm_tags表记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (tagsService *TagsService) CreateTags(tags *tag.Tags) (err error) {
-	tags.Icon = "https://static.58haha.com/" + tags.Icon
+	//tags.Icon = "https://static.58haha.com/" + tags.Icon
 	err = global.MustGetGlobalDBByDBName("market").Create(tags).Error
 	return err
 }
@@ -35,7 +35,7 @@ func (tagsService *TagsService)DeleteTagsByIds(ids request.IdsReq) (err error) {
 // UpdateTags 更新zm_tags表记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (tagsService *TagsService)UpdateTags(tags tag.Tags) (err error) {
-	tags.Icon = "https://static.58haha.com/" + tags.Icon
+	//tags.Icon = "https://static.58haha.com/" + tags.Icon
 	err = global.MustGetGlobalDBByDBName("market").Save(&tags).Error
 	return err
 }
