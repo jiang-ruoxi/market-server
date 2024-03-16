@@ -2,7 +2,7 @@
 .DS_Store
 .vscode
 .fleet
-config.yaml
+./config.yaml
 
 server
 log/*
