@@ -12,42 +12,42 @@ type TasksService struct {
 }
 
 // CreateTasks 创建zmTask表记录
-// Author [piexlmax](https://github.com/piexlmax)
 func (tasksService *TasksService) CreateTasks(tasks *task.Tasks) (err error) {
 	err = global.MustGetGlobalDBByDBName("market").Create(tasks).Error
 	return err
 }
 
 // DeleteTasks 删除zmTask表记录
-// Author [piexlmax](https://github.com/piexlmax)
 func (tasksService *TasksService) DeleteTasks(tasks task.Tasks) (err error) {
 	err = global.MustGetGlobalDBByDBName("market").Delete(&tasks).Error
 	return err
 }
 
 // DeleteTasksByIds 批量删除zmTask表记录
-// Author [piexlmax](https://github.com/piexlmax)
 func (tasksService *TasksService) DeleteTasksByIds(ids request.IdsReq) (err error) {
 	err = global.MustGetGlobalDBByDBName("market").Delete(&[]task.Tasks{}, "id in ?", ids.Ids).Error
 	return err
 }
 
 // UpdateTasks 更新zmTask表记录
-// Author [piexlmax](https://github.com/piexlmax)
 func (tasksService *TasksService) UpdateTasks(tasks task.Tasks) (err error) {
 	err = global.MustGetGlobalDBByDBName("market").Debug().Save(&tasks).Error
 	return err
 }
 
 // GetTasks 根据id获取zmTask表记录
-// Author [piexlmax](https://github.com/piexlmax)
 func (tasksService *TasksService) GetTasks(id uint) (tasks task.Tasks, err error) {
 	err = global.MustGetGlobalDBByDBName("market").Where("id = ?", id).First(&tasks).Error
+
+	var tagInfo tag.Tags
+	db1 := global.MustGetGlobalDBByDBName("market").Model(&tag.Tags{})
+	db1.Where("id=?", tasks.TagId).First(&tagInfo)
+
+	tasks.TagName = tagInfo.Name
 	return
 }
 
 // GetTasksInfoList 分页获取zmTask表记录
-// Author [piexlmax](https://github.com/piexlmax)
 func (tasksService *TasksService) GetTasksInfoList(info taskReq.TasksSearch) (list []task.Tasks, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
@@ -67,7 +67,7 @@ func (tasksService *TasksService) GetTasksInfoList(info taskReq.TasksSearch) (li
 		db = db.Limit(limit).Offset(offset)
 	}
 
-	err = db.Find(&taskss).Error
+	err = db.Order("id desc").Find(&taskss).Error
 
 	var tagList []tag.Tags
 	db1 := global.MustGetGlobalDBByDBName("market").Model(&tag.Tags{})
