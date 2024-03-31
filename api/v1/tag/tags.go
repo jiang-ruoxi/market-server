@@ -19,14 +19,6 @@ var tagsService = service.ServiceGroupApp.TagServiceGroup.TagsService
 
 
 // CreateTags 创建zm_tags表
-// @Tags Tags
-// @Summary 创建zm_tags表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body tag.Tags true "创建zm_tags表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
-// @Router /tags/createTags [post]
 func (tagsApi *TagsApi) CreateTags(c *gin.Context) {
 	var tags tag.Tags
 	err := c.ShouldBindJSON(&tags)
@@ -52,14 +44,6 @@ func (tagsApi *TagsApi) CreateTags(c *gin.Context) {
 }
 
 // DeleteTags 删除zm_tags表
-// @Tags Tags
-// @Summary 删除zm_tags表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body tag.Tags true "删除zm_tags表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /tags/deleteTags [delete]
 func (tagsApi *TagsApi) DeleteTags(c *gin.Context) {
 	var tags tag.Tags
 	err := c.ShouldBindJSON(&tags)
@@ -76,14 +60,6 @@ func (tagsApi *TagsApi) DeleteTags(c *gin.Context) {
 }
 
 // DeleteTagsByIds 批量删除zm_tags表
-// @Tags Tags
-// @Summary 批量删除zm_tags表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body request.IdsReq true "批量删除zm_tags表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"批量删除成功"}"
-// @Router /tags/deleteTagsByIds [delete]
 func (tagsApi *TagsApi) DeleteTagsByIds(c *gin.Context) {
 	var IDS request.IdsReq
     err := c.ShouldBindJSON(&IDS)
@@ -100,14 +76,6 @@ func (tagsApi *TagsApi) DeleteTagsByIds(c *gin.Context) {
 }
 
 // UpdateTags 更新zm_tags表
-// @Tags Tags
-// @Summary 更新zm_tags表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body tag.Tags true "更新zm_tags表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /tags/updateTags [put]
 func (tagsApi *TagsApi) UpdateTags(c *gin.Context) {
 	var tags tag.Tags
 	err := c.ShouldBindJSON(&tags)
@@ -133,14 +101,6 @@ func (tagsApi *TagsApi) UpdateTags(c *gin.Context) {
 }
 
 // FindTags 用id查询zm_tags表
-// @Tags Tags
-// @Summary 用id查询zm_tags表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data query tag.Tags true "用id查询zm_tags表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
-// @Router /tags/findTags [get]
 func (tagsApi *TagsApi) FindTags(c *gin.Context) {
 	var tags tag.Tags
 	err := c.ShouldBindQuery(&tags)
@@ -157,14 +117,6 @@ func (tagsApi *TagsApi) FindTags(c *gin.Context) {
 }
 
 // GetTagsList 分页获取zm_tags表列表
-// @Tags Tags
-// @Summary 分页获取zm_tags表列表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data query tagReq.TagsSearch true "分页获取zm_tags表列表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /tags/getTagsList [get]
 func (tagsApi *TagsApi) GetTagsList(c *gin.Context) {
 	var pageInfo tagReq.TagsSearch
 	err := c.ShouldBindQuery(&pageInfo)
@@ -186,14 +138,6 @@ func (tagsApi *TagsApi) GetTagsList(c *gin.Context) {
 }
 
 // GetTagsListAll 分页获取zm_tags表列表
-// @Tags Tags
-// @Summary 分页获取zm_tags表列表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data query tagReq.TagsSearch true "分页获取zm_tags表列表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /tags/getTagsListAll [get]
 func (tagsApi *TagsApi) GetTagsListAll(c *gin.Context) {
 	if list, err := tagsService.GetTagsInfoListAll(); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
