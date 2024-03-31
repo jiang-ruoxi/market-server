@@ -80,7 +80,7 @@ func (paysService *PaysService) GetPaysInfoList(info payReq.PaysSearch) (list []
 	}
 
 	err = db.Find(&payss).Error
-	
+
 	for idx, _ := range payss {
 		var payCPrice float64
 		var payOPrice float64

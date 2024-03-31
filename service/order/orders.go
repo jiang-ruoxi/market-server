@@ -26,6 +26,11 @@ func (ordersService *OrdersService)DeleteOrdersByIds(ids request.IdsReq) (err er
 // GetOrders 根据id获取zmOrder表记录
 func (ordersService *OrdersService)GetOrders(id uint) (orders order.Orders, err error) {
 	err = global.MustGetGlobalDBByDBName("market").Where("id = ?", id).First(&orders).Error
+
+	payCPrice := *orders.CPrice / 100
+	payOPrice := *orders.OPrice / 100
+	orders.CPrice = &payCPrice
+	orders.OPrice = &payOPrice
 	return
 }
 
@@ -50,5 +55,15 @@ func (ordersService *OrdersService)GetOrdersInfoList(info orderReq.OrdersSearch)
     }
 	
 	err = db.Order("id desc").Find(&orderss).Error
+
+	for idx, _ := range orderss {
+		var payCPrice float64
+		var payOPrice float64
+		payCPrice = *orderss[idx].CPrice / 100
+		payOPrice = *orderss[idx].OPrice / 100
+		orderss[idx].CPrice = &payCPrice
+		orderss[idx].OPrice = &payOPrice
+	}
+
 	return  orderss, total, err
 }
