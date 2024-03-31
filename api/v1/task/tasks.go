@@ -16,23 +16,6 @@ type TasksApi struct {
 
 var tasksService = service.ServiceGroupApp.TaskServiceGroup.TasksService
 
-
-// CreateTasks 创建zmTask表
-func (tasksApi *TasksApi) CreateTasks(c *gin.Context) {
-	var tasks task.Tasks
-	err := c.ShouldBindJSON(&tasks)
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
-	if err := tasksService.CreateTasks(&tasks); err != nil {
-        global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败", c)
-	} else {
-		response.OkWithMessage("创建成功", c)
-	}
-}
-
 // DeleteTasks 删除zmTask表
 func (tasksApi *TasksApi) DeleteTasks(c *gin.Context) {
 	var tasks task.Tasks
@@ -62,22 +45,6 @@ func (tasksApi *TasksApi) DeleteTasksByIds(c *gin.Context) {
 		response.FailWithMessage("批量删除失败", c)
 	} else {
 		response.OkWithMessage("批量删除成功", c)
-	}
-}
-
-// UpdateTasks 更新zmTask表
-func (tasksApi *TasksApi) UpdateTasks(c *gin.Context) {
-	var tasks task.Tasks
-	err := c.ShouldBindJSON(&tasks)
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
-	if err := tasksService.UpdateTasks(tasks); err != nil {
-        global.GVA_LOG.Error("更新失败!", zap.Error(err))
-		response.FailWithMessage("更新失败", c)
-	} else {
-		response.OkWithMessage("更新成功", c)
 	}
 }
 

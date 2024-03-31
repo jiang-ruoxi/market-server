@@ -15,10 +15,8 @@ func (s *MembersRouter) InitMembersRouter(Router *gin.RouterGroup) {
 	membersRouterWithoutRecord := Router.Group("members")
 	var membersApi = v1.ApiGroupApp.MemberApiGroup.MembersApi
 	{
-		membersRouter.POST("createMembers", membersApi.CreateMembers)   // 新建zmUser表
 		membersRouter.DELETE("deleteMembers", membersApi.DeleteMembers) // 删除zmUser表
 		membersRouter.DELETE("deleteMembersByIds", membersApi.DeleteMembersByIds) // 批量删除zmUser表
-		membersRouter.PUT("updateMembers", membersApi.UpdateMembers)    // 更新zmUser表
 	}
 	{
 		membersRouterWithoutRecord.GET("findMembers", membersApi.FindMembers)        // 根据ID获取zmUser表

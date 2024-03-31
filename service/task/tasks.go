@@ -11,12 +11,6 @@ import (
 type TasksService struct {
 }
 
-// CreateTasks 创建zmTask表记录
-func (tasksService *TasksService) CreateTasks(tasks *task.Tasks) (err error) {
-	err = global.MustGetGlobalDBByDBName("market").Create(tasks).Error
-	return err
-}
-
 // DeleteTasks 删除zmTask表记录
 func (tasksService *TasksService) DeleteTasks(tasks task.Tasks) (err error) {
 	err = global.MustGetGlobalDBByDBName("market").Delete(&tasks).Error
@@ -26,12 +20,6 @@ func (tasksService *TasksService) DeleteTasks(tasks task.Tasks) (err error) {
 // DeleteTasksByIds 批量删除zmTask表记录
 func (tasksService *TasksService) DeleteTasksByIds(ids request.IdsReq) (err error) {
 	err = global.MustGetGlobalDBByDBName("market").Delete(&[]task.Tasks{}, "id in ?", ids.Ids).Error
-	return err
-}
-
-// UpdateTasks 更新zmTask表记录
-func (tasksService *TasksService) UpdateTasks(tasks task.Tasks) (err error) {
-	err = global.MustGetGlobalDBByDBName("market").Debug().Save(&tasks).Error
 	return err
 }
 

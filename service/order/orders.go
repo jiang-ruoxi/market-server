@@ -10,43 +10,26 @@ import (
 type OrdersService struct {
 }
 
-// CreateOrders 创建zmOrder表记录
-// Author [piexlmax](https://github.com/piexlmax)
-func (ordersService *OrdersService) CreateOrders(orders *order.Orders) (err error) {
-	err = global.MustGetGlobalDBByDBName("market").Create(orders).Error
-	return err
-}
 
 // DeleteOrders 删除zmOrder表记录
-// Author [piexlmax](https://github.com/piexlmax)
 func (ordersService *OrdersService)DeleteOrders(orders order.Orders) (err error) {
 	err = global.MustGetGlobalDBByDBName("market").Delete(&orders).Error
 	return err
 }
 
 // DeleteOrdersByIds 批量删除zmOrder表记录
-// Author [piexlmax](https://github.com/piexlmax)
 func (ordersService *OrdersService)DeleteOrdersByIds(ids request.IdsReq) (err error) {
 	err = global.MustGetGlobalDBByDBName("market").Delete(&[]order.Orders{},"id in ?",ids.Ids).Error
 	return err
 }
 
-// UpdateOrders 更新zmOrder表记录
-// Author [piexlmax](https://github.com/piexlmax)
-func (ordersService *OrdersService)UpdateOrders(orders order.Orders) (err error) {
-	err = global.MustGetGlobalDBByDBName("market").Save(&orders).Error
-	return err
-}
-
 // GetOrders 根据id获取zmOrder表记录
-// Author [piexlmax](https://github.com/piexlmax)
 func (ordersService *OrdersService)GetOrders(id uint) (orders order.Orders, err error) {
 	err = global.MustGetGlobalDBByDBName("market").Where("id = ?", id).First(&orders).Error
 	return
 }
 
 // GetOrdersInfoList 分页获取zmOrder表记录
-// Author [piexlmax](https://github.com/piexlmax)
 func (ordersService *OrdersService)GetOrdersInfoList(info orderReq.OrdersSearch) (list []order.Orders, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
@@ -66,6 +49,6 @@ func (ordersService *OrdersService)GetOrdersInfoList(info orderReq.OrdersSearch)
        db = db.Limit(limit).Offset(offset)
     }
 	
-	err = db.Find(&orderss).Error
+	err = db.Order("id desc").Find(&orderss).Error
 	return  orderss, total, err
 }

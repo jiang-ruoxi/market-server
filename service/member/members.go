@@ -11,12 +11,6 @@ import (
 type MembersService struct {
 }
 
-// CreateMembers 创建zmUser表记录
-func (membersService *MembersService) CreateMembers(members *member.Members) (err error) {
-	err = global.MustGetGlobalDBByDBName("market").Create(members).Error
-	return err
-}
-
 // DeleteMembers 删除zmUser表记录
 func (membersService *MembersService) DeleteMembers(members member.Members) (err error) {
 	err = global.MustGetGlobalDBByDBName("market").Delete(&members).Error
@@ -26,12 +20,6 @@ func (membersService *MembersService) DeleteMembers(members member.Members) (err
 // DeleteMembersByIds 批量删除zmUser表记录
 func (membersService *MembersService) DeleteMembersByIds(ids request.IdsReq) (err error) {
 	err = global.MustGetGlobalDBByDBName("market").Delete(&[]member.Members{}, "id in ?", ids.Ids).Error
-	return err
-}
-
-// UpdateMembers 更新zmUser表记录
-func (membersService *MembersService) UpdateMembers(members member.Members) (err error) {
-	err = global.MustGetGlobalDBByDBName("market").Save(&members).Error
 	return err
 }
 

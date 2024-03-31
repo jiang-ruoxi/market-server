@@ -7,7 +7,6 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/member"
 	memberReq "github.com/flipped-aurora/gin-vue-admin/server/model/member/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -16,34 +15,6 @@ type MembersApi struct {
 }
 
 var membersService = service.ServiceGroupApp.MemberServiceGroup.MembersService
-
-
-// CreateMembers 创建zmUser表
-func (membersApi *MembersApi) CreateMembers(c *gin.Context) {
-	var members member.Members
-	err := c.ShouldBindJSON(&members)
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
-    verify := utils.Rules{
-        "OpenId":{utils.NotEmpty()},
-        "NickName":{utils.NotEmpty()},
-        "HeadUrl":{utils.NotEmpty()},
-        "Mobile":{utils.NotEmpty()},
-        "ParentId":{utils.NotEmpty()},
-    }
-	if err := utils.Verify(members, verify); err != nil {
-    		response.FailWithMessage(err.Error(), c)
-    		return
-    	}
-	if err := membersService.CreateMembers(&members); err != nil {
-        global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败", c)
-	} else {
-		response.OkWithMessage("创建成功", c)
-	}
-}
 
 // DeleteMembers 删除zmUser表
 func (membersApi *MembersApi) DeleteMembers(c *gin.Context) {
@@ -74,33 +45,6 @@ func (membersApi *MembersApi) DeleteMembersByIds(c *gin.Context) {
 		response.FailWithMessage("批量删除失败", c)
 	} else {
 		response.OkWithMessage("批量删除成功", c)
-	}
-}
-
-// UpdateMembers 更新zmUser表
-func (membersApi *MembersApi) UpdateMembers(c *gin.Context) {
-	var members member.Members
-	err := c.ShouldBindJSON(&members)
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
-      verify := utils.Rules{
-          "OpenId":{utils.NotEmpty()},
-          "NickName":{utils.NotEmpty()},
-          "HeadUrl":{utils.NotEmpty()},
-          "Mobile":{utils.NotEmpty()},
-          "ParentId":{utils.NotEmpty()},
-      }
-    if err := utils.Verify(members, verify); err != nil {
-      	response.FailWithMessage(err.Error(), c)
-      	return
-     }
-	if err := membersService.UpdateMembers(members); err != nil {
-        global.GVA_LOG.Error("更新失败!", zap.Error(err))
-		response.FailWithMessage("更新失败", c)
-	} else {
-		response.OkWithMessage("更新成功", c)
 	}
 }
 
