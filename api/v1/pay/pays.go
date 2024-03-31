@@ -18,14 +18,6 @@ type PaysApi struct {
 var paysService = service.ServiceGroupApp.PayServiceGroup.PaysService
 
 // CreatePays 创建zmPay表
-// @Tags Pays
-// @Summary 创建zmPay表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body pay.Pays true "创建zmPay表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
-// @Router /pays/createPays [post]
 func (paysApi *PaysApi) CreatePays(c *gin.Context) {
 	var pays pay.Pays
 	err := c.ShouldBindJSON(&pays)
@@ -55,14 +47,6 @@ func (paysApi *PaysApi) CreatePays(c *gin.Context) {
 }
 
 // DeletePays 删除zmPay表
-// @Tags Pays
-// @Summary 删除zmPay表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body pay.Pays true "删除zmPay表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /pays/deletePays [delete]
 func (paysApi *PaysApi) DeletePays(c *gin.Context) {
 	var pays pay.Pays
 	err := c.ShouldBindJSON(&pays)
@@ -79,14 +63,6 @@ func (paysApi *PaysApi) DeletePays(c *gin.Context) {
 }
 
 // DeletePaysByIds 批量删除zmPay表
-// @Tags Pays
-// @Summary 批量删除zmPay表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body request.IdsReq true "批量删除zmPay表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"批量删除成功"}"
-// @Router /pays/deletePaysByIds [delete]
 func (paysApi *PaysApi) DeletePaysByIds(c *gin.Context) {
 	var IDS request.IdsReq
 	err := c.ShouldBindJSON(&IDS)
@@ -103,14 +79,6 @@ func (paysApi *PaysApi) DeletePaysByIds(c *gin.Context) {
 }
 
 // UpdatePays 更新zmPay表
-// @Tags Pays
-// @Summary 更新zmPay表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body pay.Pays true "更新zmPay表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /pays/updatePays [put]
 func (paysApi *PaysApi) UpdatePays(c *gin.Context) {
 	var pays pay.Pays
 	err := c.ShouldBindJSON(&pays)
@@ -140,14 +108,6 @@ func (paysApi *PaysApi) UpdatePays(c *gin.Context) {
 }
 
 // FindPays 用id查询zmPay表
-// @Tags Pays
-// @Summary 用id查询zmPay表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data query pay.Pays true "用id查询zmPay表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
-// @Router /pays/findPays [get]
 func (paysApi *PaysApi) FindPays(c *gin.Context) {
 	var pays pay.Pays
 	err := c.ShouldBindQuery(&pays)
@@ -164,14 +124,6 @@ func (paysApi *PaysApi) FindPays(c *gin.Context) {
 }
 
 // GetPaysList 分页获取zmPay表列表
-// @Tags Pays
-// @Summary 分页获取zmPay表列表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data query payReq.PaysSearch true "分页获取zmPay表列表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /pays/getPaysList [get]
 func (paysApi *PaysApi) GetPaysList(c *gin.Context) {
 	var pageInfo payReq.PaysSearch
 	err := c.ShouldBindQuery(&pageInfo)
