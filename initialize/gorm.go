@@ -9,13 +9,6 @@ import (
 
 	"go.uber.org/zap"
 	"gorm.io/gorm"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/tag"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/banner"
-
-	"github.com/flipped-aurora/gin-vue-admin/server/model/task"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/member"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/pay"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/order"
 )
 
 func Gorm() *gorm.DB {
@@ -36,7 +29,7 @@ func Gorm() *gorm.DB {
 }
 
 func RegisterTables() {
-	market := global.GetGlobalDBByDBName("market")
+	//market := global.GetGlobalDBByDBName("market")
 	db := global.GVA_DB
 	err := db.AutoMigrate(
 
@@ -65,5 +58,5 @@ func RegisterTables() {
 		os.Exit(0)
 	}
 	global.GVA_LOG.Info("register table success")
-	market.AutoMigrate(tag.Tags{}, banner.Banners{}, task.Tasks{}, member.Members{}, pay.Pays{}, order.Orders{})
+	//market.AutoMigrate(tag.Tags{}, banner.Banners{}, task.Tasks{}, member.Members{}, pay.Pays{}, order.Orders{})
 }

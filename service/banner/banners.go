@@ -1,10 +1,12 @@
 package banner
 
 import (
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/banner"
 	bannerReq "github.com/flipped-aurora/gin-vue-admin/server/model/banner/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"strconv"
 )
 
 type BannersService struct {
@@ -20,54 +22,66 @@ func (bannersService *BannersService) CreateBanners(banners *banner.Banners) (er
 
 // DeleteBanners 删除zm_banner表记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (bannersService *BannersService)DeleteBanners(banners banner.Banners) (err error) {
+func (bannersService *BannersService) DeleteBanners(banners banner.Banners) (err error) {
 	err = global.MustGetGlobalDBByDBName("market").Delete(&banners).Error
 	return err
 }
 
 // DeleteBannersByIds 批量删除zm_banner表记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (bannersService *BannersService)DeleteBannersByIds(ids request.IdsReq) (err error) {
-	err = global.MustGetGlobalDBByDBName("market").Delete(&[]banner.Banners{},"id in ?",ids.Ids).Error
+func (bannersService *BannersService) DeleteBannersByIds(ids request.IdsReq) (err error) {
+	err = global.MustGetGlobalDBByDBName("market").Delete(&[]banner.Banners{}, "id in ?", ids.Ids).Error
 	return err
 }
 
 // UpdateBanners 更新zm_banner表记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (bannersService *BannersService)UpdateBanners(banners banner.Banners) (err error) {
-	//banners.Image = "https://static.58haha.com/" + banners.Image
-	err = global.MustGetGlobalDBByDBName("market").Save(&banners).Error
+func (bannersService *BannersService) UpdateBanners(banners banner.Banners) (err error) {
+	fmt.Printf("%#v \n", banners)
+	err = global.MustGetGlobalDBByDBName("market").Where("id=?", banners.ID).Save(&banners).Error
 	return err
 }
 
 // GetBanners 根据id获取zm_banner表记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (bannersService *BannersService)GetBanners(id uint) (banners banner.Banners, err error) {
-	err = global.MustGetGlobalDBByDBName("market").Where("id = ?", id).First(&banners).Error
+func (bannersService *BannersService) GetBanners(id uint) (bannerInfo banner.BannersResponse, err error) {
+	var banner banner.Banners
+	err = global.MustGetGlobalDBByDBName("market").Where("id = ?", id).First(&banner).Error
+	bannerInfo.ID = banner.ID
+	bannerInfo.Name = banner.Name
+	bannerInfo.Image = banner.Image
+
+	statusBool := false
+	if banner.Status != 0 {
+		statusBool = true
+	}
+
+	bannerInfo.Status = &statusBool
+	bannerInfo.Type = strconv.Itoa(banner.Type)
 	return
 }
 
 // GetBannersInfoList 分页获取zm_banner表记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (bannersService *BannersService)GetBannersInfoList(info bannerReq.BannersSearch) (list []banner.Banners, total int64, err error) {
+func (bannersService *BannersService) GetBannersInfoList(info bannerReq.BannersSearch) (list []banner.Banners, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
-    // 创建db
+	// 创建db
 	db := global.MustGetGlobalDBByDBName("market").Model(&banner.Banners{})
-    var bannerss []banner.Banners
-    // 如果有条件搜索 下方会自动创建搜索语句
-    if info.StartCreatedAt !=nil && info.EndCreatedAt !=nil {
-     db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
-    }
+	var bannerss []banner.Banners
+	// 如果有条件搜索 下方会自动创建搜索语句
+	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
+		db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
+	}
 	err = db.Count(&total).Error
-	if err!=nil {
-    	return
-    }
+	if err != nil {
+		return
+	}
 
 	if limit != 0 {
-       db = db.Limit(limit).Offset(offset)
-    }
-	
+		db = db.Limit(limit).Offset(offset)
+	}
+
 	err = db.Find(&bannerss).Error
-	return  bannerss, total, err
+	return bannerss, total, err
 }
