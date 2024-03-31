@@ -2,14 +2,14 @@ package member
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/member"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-    memberReq "github.com/flipped-aurora/gin-vue-admin/server/model/member/request"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-    "github.com/flipped-aurora/gin-vue-admin/server/service"
-    "github.com/gin-gonic/gin"
-    "go.uber.org/zap"
-    "github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/member"
+	memberReq "github.com/flipped-aurora/gin-vue-admin/server/model/member/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type MembersApi struct {
@@ -19,14 +19,6 @@ var membersService = service.ServiceGroupApp.MemberServiceGroup.MembersService
 
 
 // CreateMembers 创建zmUser表
-// @Tags Members
-// @Summary 创建zmUser表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body member.Members true "创建zmUser表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
-// @Router /members/createMembers [post]
 func (membersApi *MembersApi) CreateMembers(c *gin.Context) {
 	var members member.Members
 	err := c.ShouldBindJSON(&members)
@@ -54,14 +46,6 @@ func (membersApi *MembersApi) CreateMembers(c *gin.Context) {
 }
 
 // DeleteMembers 删除zmUser表
-// @Tags Members
-// @Summary 删除zmUser表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body member.Members true "删除zmUser表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /members/deleteMembers [delete]
 func (membersApi *MembersApi) DeleteMembers(c *gin.Context) {
 	var members member.Members
 	err := c.ShouldBindJSON(&members)
@@ -78,14 +62,6 @@ func (membersApi *MembersApi) DeleteMembers(c *gin.Context) {
 }
 
 // DeleteMembersByIds 批量删除zmUser表
-// @Tags Members
-// @Summary 批量删除zmUser表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body request.IdsReq true "批量删除zmUser表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"批量删除成功"}"
-// @Router /members/deleteMembersByIds [delete]
 func (membersApi *MembersApi) DeleteMembersByIds(c *gin.Context) {
 	var IDS request.IdsReq
     err := c.ShouldBindJSON(&IDS)
@@ -102,14 +78,6 @@ func (membersApi *MembersApi) DeleteMembersByIds(c *gin.Context) {
 }
 
 // UpdateMembers 更新zmUser表
-// @Tags Members
-// @Summary 更新zmUser表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body member.Members true "更新zmUser表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /members/updateMembers [put]
 func (membersApi *MembersApi) UpdateMembers(c *gin.Context) {
 	var members member.Members
 	err := c.ShouldBindJSON(&members)
@@ -137,14 +105,6 @@ func (membersApi *MembersApi) UpdateMembers(c *gin.Context) {
 }
 
 // FindMembers 用id查询zmUser表
-// @Tags Members
-// @Summary 用id查询zmUser表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data query member.Members true "用id查询zmUser表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
-// @Router /members/findMembers [get]
 func (membersApi *MembersApi) FindMembers(c *gin.Context) {
 	var members member.Members
 	err := c.ShouldBindQuery(&members)
@@ -161,14 +121,6 @@ func (membersApi *MembersApi) FindMembers(c *gin.Context) {
 }
 
 // GetMembersList 分页获取zmUser表列表
-// @Tags Members
-// @Summary 分页获取zmUser表列表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data query memberReq.MembersSearch true "分页获取zmUser表列表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /members/getMembersList [get]
 func (membersApi *MembersApi) GetMembersList(c *gin.Context) {
 	var pageInfo memberReq.MembersSearch
 	err := c.ShouldBindQuery(&pageInfo)
