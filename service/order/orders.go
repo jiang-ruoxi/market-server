@@ -10,21 +10,22 @@ import (
 type OrdersService struct {
 }
 
-
 // DeleteOrders 删除zmOrder表记录
-func (ordersService *OrdersService)DeleteOrders(orders order.Orders) (err error) {
-	err = global.MustGetGlobalDBByDBName("market").Delete(&orders).Error
+func (ordersService *OrdersService) DeleteOrders(orders order.Orders) (err error) {
+	var s order.Orders
+	err = global.MustGetGlobalDBByDBName("market").Model(&s).Debug().Where("id=?", orders.ID).Update("is_deleted", 1).Error
 	return err
 }
 
 // DeleteOrdersByIds 批量删除zmOrder表记录
-func (ordersService *OrdersService)DeleteOrdersByIds(ids request.IdsReq) (err error) {
-	err = global.MustGetGlobalDBByDBName("market").Delete(&[]order.Orders{},"id in ?",ids.Ids).Error
+func (ordersService *OrdersService) DeleteOrdersByIds(ids request.IdsReq) (err error) {
+	var s order.Orders
+	err = global.MustGetGlobalDBByDBName("market").Model(&s).Debug().Where("id IN ?", ids.Ids).Updates(&order.Orders{IsDeleted: 1}).Error
 	return err
 }
 
 // GetOrders 根据id获取zmOrder表记录
-func (ordersService *OrdersService)GetOrders(id uint) (orders order.Orders, err error) {
+func (ordersService *OrdersService) GetOrders(id int) (orders order.Orders, err error) {
 	err = global.MustGetGlobalDBByDBName("market").Where("id = ?", id).First(&orders).Error
 
 	payCPrice := *orders.CPrice / 100
@@ -35,25 +36,25 @@ func (ordersService *OrdersService)GetOrders(id uint) (orders order.Orders, err 
 }
 
 // GetOrdersInfoList 分页获取zmOrder表记录
-func (ordersService *OrdersService)GetOrdersInfoList(info orderReq.OrdersSearch) (list []order.Orders, total int64, err error) {
+func (ordersService *OrdersService) GetOrdersInfoList(info orderReq.OrdersSearch) (list []order.Orders, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
-    // 创建db
-	db := global.MustGetGlobalDBByDBName("market").Model(&order.Orders{})
-    var orderss []order.Orders
-    // 如果有条件搜索 下方会自动创建搜索语句
-    if info.StartCreatedAt !=nil && info.EndCreatedAt !=nil {
-     db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
-    }
+	// 创建db
+	db := global.MustGetGlobalDBByDBName("market").Model(&order.Orders{}).Where("is_deleted = 0")
+	var orderss []order.Orders
+	// 如果有条件搜索 下方会自动创建搜索语句
+	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
+		db = db.Where(" and created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
+	}
 	err = db.Count(&total).Error
-	if err!=nil {
-    	return
-    }
+	if err != nil {
+		return
+	}
 
 	if limit != 0 {
-       db = db.Limit(limit).Offset(offset)
-    }
-	
+		db = db.Limit(limit).Offset(offset)
+	}
+
 	err = db.Order("id desc").Find(&orderss).Error
 
 	for idx, _ := range orderss {
@@ -65,5 +66,5 @@ func (ordersService *OrdersService)GetOrdersInfoList(info orderReq.OrdersSearch)
 		orderss[idx].OPrice = &payOPrice
 	}
 
-	return  orderss, total, err
+	return orderss, total, err
 }
