@@ -1,7 +1,6 @@
 package banner
 
 import (
-	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/banner"
 	bannerReq "github.com/flipped-aurora/gin-vue-admin/server/model/banner/request"
@@ -20,25 +19,26 @@ func (bannersService *BannersService) CreateBanners(banners *banner.Banners) (er
 
 // DeleteBanners 删除zm_banner表记录
 func (bannersService *BannersService) DeleteBanners(banners banner.Banners) (err error) {
-	err = global.MustGetGlobalDBByDBName("market").Delete(&banners).Error
+	var s banner.Banners
+	err = global.MustGetGlobalDBByDBName("market").Model(&s).Debug().Where("id=?", banners.ID).Update("is_deleted", 1).Error
 	return err
 }
 
 // DeleteBannersByIds 批量删除zm_banner表记录
 func (bannersService *BannersService) DeleteBannersByIds(ids request.IdsReq) (err error) {
-	err = global.MustGetGlobalDBByDBName("market").Delete(&[]banner.Banners{}, "id in ?", ids.Ids).Error
+	var s banner.Banners
+	err = global.MustGetGlobalDBByDBName("market").Model(&s).Debug().Where("id IN ?", ids.Ids).Updates(&banner.Banners{IsDeleted: 1}).Error
 	return err
 }
 
 // UpdateBanners 更新zm_banner表记录
 func (bannersService *BannersService) UpdateBanners(banners banner.Banners) (err error) {
-	fmt.Printf("%#v \n", banners)
 	err = global.MustGetGlobalDBByDBName("market").Where("id=?", banners.ID).Save(&banners).Error
 	return err
 }
 
 // GetBanners 根据id获取zm_banner表记录
-func (bannersService *BannersService) GetBanners(id uint) (bannerInfo banner.BannersResponse, err error) {
+func (bannersService *BannersService) GetBanners(id int) (bannerInfo banner.BannersResponse, err error) {
 	var banner banner.Banners
 	err = global.MustGetGlobalDBByDBName("market").Where("id = ?", id).First(&banner).Error
 	bannerInfo.ID = banner.ID
@@ -60,12 +60,8 @@ func (bannersService *BannersService) GetBannersInfoList(info bannerReq.BannersS
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.MustGetGlobalDBByDBName("market").Model(&banner.Banners{})
+	db := global.MustGetGlobalDBByDBName("market").Model(&banner.Banners{}).Debug().Where("is_deleted = 0")
 	var bannerss []banner.Banners
-	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
-		db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
-	}
 	err = db.Count(&total).Error
 	if err != nil {
 		return
