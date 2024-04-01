@@ -2,7 +2,6 @@ package tag
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/banner"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/tag"
 	tagReq "github.com/flipped-aurora/gin-vue-admin/server/model/tag/request"
@@ -27,7 +26,7 @@ func (tagsService *TagsService) DeleteTags(tags tag.Tags) (err error) {
 // DeleteTagsByIds 批量删除zm_tags表记录
 func (tagsService *TagsService) DeleteTagsByIds(ids request.IdsReq) (err error) {
 	var s tag.Tags
-	err = global.MustGetGlobalDBByDBName("market").Model(&s).Debug().Where("id IN ?", ids.Ids).Updates(&banner.Banners{IsDeleted: 1}).Error
+	err = global.MustGetGlobalDBByDBName("market").Model(&s).Debug().Where("id IN ?", ids.Ids).Updates(&tag.Tags{IsDeleted: 1}).Error
 	return err
 }
 

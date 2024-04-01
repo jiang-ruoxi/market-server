@@ -13,18 +13,20 @@ type TasksService struct {
 
 // DeleteTasks 删除zmTask表记录
 func (tasksService *TasksService) DeleteTasks(tasks task.Tasks) (err error) {
-	err = global.MustGetGlobalDBByDBName("market").Delete(&tasks).Error
+	var s task.Tasks
+	err = global.MustGetGlobalDBByDBName("market").Model(&s).Debug().Where("id=?", tasks.ID).Update("is_deleted", 1).Error
 	return err
 }
 
 // DeleteTasksByIds 批量删除zmTask表记录
 func (tasksService *TasksService) DeleteTasksByIds(ids request.IdsReq) (err error) {
-	err = global.MustGetGlobalDBByDBName("market").Delete(&[]task.Tasks{}, "id in ?", ids.Ids).Error
+	var s task.Tasks
+	err = global.MustGetGlobalDBByDBName("market").Model(&s).Debug().Where("id IN ?", ids.Ids).Updates(&task.Tasks{IsDeleted: 1}).Error
 	return err
 }
 
 // GetTasks 根据id获取zmTask表记录
-func (tasksService *TasksService) GetTasks(id uint) (tasks task.Tasks, err error) {
+func (tasksService *TasksService) GetTasks(id int) (tasks task.Tasks, err error) {
 	err = global.MustGetGlobalDBByDBName("market").Where("id = ?", id).First(&tasks).Error
 
 	var tagInfo tag.Tags
@@ -40,11 +42,11 @@ func (tasksService *TasksService) GetTasksInfoList(info taskReq.TasksSearch) (li
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.MustGetGlobalDBByDBName("market").Model(&task.Tasks{})
+	db := global.MustGetGlobalDBByDBName("market").Model(&task.Tasks{}).Where("is_deleted = 0")
 	var taskss []task.Tasks
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
-		db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
+		db = db.Where(" and created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
 	}
 	err = db.Count(&total).Error
 	if err != nil {
