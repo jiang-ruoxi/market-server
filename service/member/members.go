@@ -13,18 +13,20 @@ type MembersService struct {
 
 // DeleteMembers 删除zmUser表记录
 func (membersService *MembersService) DeleteMembers(members member.Members) (err error) {
-	err = global.MustGetGlobalDBByDBName("market").Delete(&members).Error
+	var s member.Members
+	err = global.MustGetGlobalDBByDBName("market").Model(&s).Debug().Where("id=?", members.ID).Update("is_deleted", 1).Error
 	return err
 }
 
 // DeleteMembersByIds 批量删除zmUser表记录
 func (membersService *MembersService) DeleteMembersByIds(ids request.IdsReq) (err error) {
-	err = global.MustGetGlobalDBByDBName("market").Delete(&[]member.Members{}, "id in ?", ids.Ids).Error
+	var s member.Members
+	err = global.MustGetGlobalDBByDBName("market").Model(&s).Debug().Where("id IN ?", ids.Ids).Updates(&member.Members{IsDeleted: 1}).Error
 	return err
 }
 
 // GetMembers 根据id获取zmUser表记录
-func (membersService *MembersService) GetMembers(id uint) (members member.Members, err error) {
+func (membersService *MembersService) GetMembers(id int) (members member.Members, err error) {
 	err = global.MustGetGlobalDBByDBName("market").Where("id = ?", id).First(&members).Error
 
 	var tagInfo tag.Tags
@@ -40,11 +42,11 @@ func (membersService *MembersService) GetMembersInfoList(info memberReq.MembersS
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.MustGetGlobalDBByDBName("market").Model(&member.Members{})
+	db := global.MustGetGlobalDBByDBName("market").Model(&member.Members{}).Where("is_deleted = 0")
 	var memberss []member.Members
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
-		db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
+		db = db.Where(" and created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
 	}
 	err = db.Count(&total).Error
 	if err != nil {
