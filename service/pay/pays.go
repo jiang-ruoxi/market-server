@@ -24,13 +24,15 @@ func (paysService *PaysService) CreatePays(pays *pay.Pays) (err error) {
 
 // DeletePays 删除zmPay表记录
 func (paysService *PaysService) DeletePays(pays pay.Pays) (err error) {
-	err = global.MustGetGlobalDBByDBName("market").Delete(&pays).Error
+	var s pay.Pays
+	err = global.MustGetGlobalDBByDBName("market").Model(&s).Debug().Where("id=?", pays.ID).Update("is_deleted", 1).Error
 	return err
 }
 
 // DeletePaysByIds 批量删除zmPay表记录
 func (paysService *PaysService) DeletePaysByIds(ids request.IdsReq) (err error) {
-	err = global.MustGetGlobalDBByDBName("market").Delete(&[]pay.Pays{}, "id in ?", ids.Ids).Error
+	var s pay.Pays
+	err = global.MustGetGlobalDBByDBName("market").Model(&s).Debug().Where("id IN ?", ids.Ids).Updates(&pay.Pays{IsDeleted: 1}).Error
 	return err
 }
 
@@ -47,7 +49,7 @@ func (paysService *PaysService) UpdatePays(pays pay.Pays) (err error) {
 }
 
 // GetPays 根据id获取zmPay表记录
-func (paysService *PaysService) GetPays(id uint) (pays pay.Pays, err error) {
+func (paysService *PaysService) GetPays(id int) (pays pay.Pays, err error) {
 	err = global.MustGetGlobalDBByDBName("market").Where("id = ?", id).First(&pays).Error
 	payCPrice := *pays.CPrice / 100
 	payOPrice := *pays.OPrice / 100
@@ -61,12 +63,8 @@ func (paysService *PaysService) GetPaysInfoList(info payReq.PaysSearch) (list []
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.MustGetGlobalDBByDBName("market").Model(&pay.Pays{})
+	db := global.MustGetGlobalDBByDBName("market").Model(&pay.Pays{}).Where("is_deleted = 0")
 	var payss []pay.Pays
-	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
-		db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
-	}
 	if info.Type != "" {
 		db = db.Where("type = ?", info.Type)
 	}
