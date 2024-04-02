@@ -16,6 +16,22 @@ type OrdersApi struct {
 
 var ordersService = service.ServiceGroupApp.OrderServiceGroup.OrdersService
 
+// RefundOrders 退费操作
+func (ordersApi *OrdersApi) RefundOrders(c *gin.Context) {
+	var orders order.Orders
+	err := c.ShouldBindQuery(&orders)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if reorders, err := ordersService.RefundOrders(orders.ID); err != nil {
+		global.GVA_LOG.Error("退费失败!", zap.Error(err))
+		response.FailWithMessage("退费失败", c)
+	} else {
+		response.OkWithData(gin.H{"reorders": reorders}, c)
+	}
+}
+
 // DeleteOrders 删除zmOrder表
 func (ordersApi *OrdersApi) DeleteOrders(c *gin.Context) {
 	var orders order.Orders
@@ -25,7 +41,7 @@ func (ordersApi *OrdersApi) DeleteOrders(c *gin.Context) {
 		return
 	}
 	if err := ordersService.DeleteOrders(orders); err != nil {
-        global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
@@ -35,13 +51,13 @@ func (ordersApi *OrdersApi) DeleteOrders(c *gin.Context) {
 // DeleteOrdersByIds 批量删除zmOrder表
 func (ordersApi *OrdersApi) DeleteOrdersByIds(c *gin.Context) {
 	var IDS request.IdsReq
-    err := c.ShouldBindJSON(&IDS)
+	err := c.ShouldBindJSON(&IDS)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
 	if err := ordersService.DeleteOrdersByIds(IDS); err != nil {
-        global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 	} else {
 		response.OkWithMessage("批量删除成功", c)
@@ -57,7 +73,7 @@ func (ordersApi *OrdersApi) FindOrders(c *gin.Context) {
 		return
 	}
 	if reorders, err := ordersService.GetOrders(orders.ID); err != nil {
-        global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
 		response.OkWithData(gin.H{"reorders": reorders}, c)
@@ -73,14 +89,14 @@ func (ordersApi *OrdersApi) GetOrdersList(c *gin.Context) {
 		return
 	}
 	if list, total, err := ordersService.GetOrdersInfoList(pageInfo); err != nil {
-	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
-        response.FailWithMessage("获取失败", c)
-    } else {
-        response.OkWithDetailed(response.PageResult{
-            List:     list,
-            Total:    total,
-            Page:     pageInfo.Page,
-            PageSize: pageInfo.PageSize,
-        }, "获取成功", c)
-    }
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
 }

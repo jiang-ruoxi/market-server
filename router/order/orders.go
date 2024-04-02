@@ -15,11 +15,12 @@ func (s *OrdersRouter) InitOrdersRouter(Router *gin.RouterGroup) {
 	ordersRouterWithoutRecord := Router.Group("orders")
 	var ordersApi = v1.ApiGroupApp.OrderApiGroup.OrdersApi
 	{
-		ordersRouter.DELETE("deleteOrders", ordersApi.DeleteOrders) // 删除zmOrder表
+		ordersRouter.DELETE("deleteOrders", ordersApi.DeleteOrders)           // 删除zmOrder表
 		ordersRouter.DELETE("deleteOrdersByIds", ordersApi.DeleteOrdersByIds) // 批量删除zmOrder表
 	}
 	{
-		ordersRouterWithoutRecord.GET("findOrders", ordersApi.FindOrders)        // 根据ID获取zmOrder表
-		ordersRouterWithoutRecord.GET("getOrdersList", ordersApi.GetOrdersList)  // 获取zmOrder表列表
+		ordersRouter.GET("refundOrders", ordersApi.RefundOrders)             // 退费zm_tags表
+		ordersRouterWithoutRecord.GET("findOrders", ordersApi.FindOrders)       // 根据ID获取zmOrder表
+		ordersRouterWithoutRecord.GET("getOrdersList", ordersApi.GetOrdersList) // 获取zmOrder表列表
 	}
 }

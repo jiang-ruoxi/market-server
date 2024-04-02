@@ -1,6 +1,7 @@
 package order
 
 import (
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/order"
@@ -8,6 +9,14 @@ import (
 )
 
 type OrdersService struct {
+}
+
+//RefundOrders 退费操作
+func (ordersService *OrdersService) RefundOrders(id int) (orders order.Orders, err error) {
+	//var s order.Orders
+	fmt.Printf("退费的id:%#v \n", id)
+	//这里发起http请求，请求api的退费接口
+	return
 }
 
 // DeleteOrders 删除zmOrder表记录
