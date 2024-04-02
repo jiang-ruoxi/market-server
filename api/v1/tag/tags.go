@@ -30,6 +30,7 @@ func (tagsApi *TagsApi) CreateTags(c *gin.Context) {
         "Name":{utils.NotEmpty()},
         "Icon":{utils.NotEmpty()},
         "Status":{utils.NotEmpty()},
+		"Sort":{utils.NotEmpty()},
     }
 	if err := utils.Verify(tags, verify); err != nil {
     		response.FailWithMessage(err.Error(), c)

@@ -7,6 +7,7 @@ type Tags struct {
 	Name      string `json:"name" form:"name" gorm:"column:name;comment:icon名称;size:256;"`                 //icon名称
 	Icon      string `json:"icon" form:"icon" gorm:"column:icon;comment:icon链接;size:1024;"`                //icon链接
 	Status    *bool  `json:"status" form:"status" gorm:"column:status;comment:状态,1启用,0禁用;"`                //状态,1启用,0禁用
+	Sort      int    `json:"sort" form:"sort" gorm:"column:sort;comment:排序,倒序;"`                           //排序
 	IsDeleted int    `json:"is_deleted" form:"is_deleted" gorm:"column:is_deleted;comment:是否删除,1已删除,0正常;"` //是否删除,1已删除,0正常
 }
 
