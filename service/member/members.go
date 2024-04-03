@@ -45,8 +45,14 @@ func (membersService *MembersService) GetMembersInfoList(info memberReq.MembersS
 	db := global.MustGetGlobalDBByDBName("market").Model(&member.Members{}).Where("is_deleted = 0")
 	var memberss []member.Members
 	// 如果有条件搜索 下方会自动创建搜索语句
+	if info.UserId != "" {
+		db = db.Where("user_id =?", info.UserId)
+	}
+	if info.Mobile != "" {
+		db = db.Where("mobile =?", info.Mobile)
+	}
 	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
-		db = db.Where(" and created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
+		db = db.Where(" created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
 	}
 	err = db.Count(&total).Error
 	if err != nil {
