@@ -105,7 +105,8 @@ func (ordersService *OrdersService) sendHttpPostData(orderId int) (code int, mes
 	requestBody := bytes.NewBuffer(postBody)
 
 	// 创建请求
-	req, err := http.NewRequest("POST", "https://market.58haha.com/api/wechat/pay/refunds", requestBody)
+	refundUrl := global.GVA_CONFIG.WxPay.Refund
+	req, err := http.NewRequest("POST", refundUrl, requestBody)
 	if err != nil {
 		fmt.Println(err)
 		return
