@@ -65,11 +65,17 @@ func (ordersService *OrdersService) GetOrdersInfoList(info orderReq.OrdersSearch
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.MustGetGlobalDBByDBName("market").Model(&order.Orders{}).Where("is_deleted = 0")
+	db := global.MustGetGlobalDBByDBName("market").Model(&order.Orders{}).Where("is_deleted = 0").Debug()
 	var orderss []order.Orders
 	// 如果有条件搜索 下方会自动创建搜索语句
+	if info.UserId != nil && *info.UserId > 0 {
+		db = db.Where(" user_id =?", *info.UserId)
+	}
+	if info.Status != nil && *info.Status > -5 {
+		db = db.Where(" status =?", *info.Status)
+	}
 	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
-		db = db.Where(" and created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
+		db = db.Where(" pay_time BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
 	}
 	err = db.Count(&total).Error
 	if err != nil {
