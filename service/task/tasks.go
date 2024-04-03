@@ -42,11 +42,14 @@ func (tasksService *TasksService) GetTasksInfoList(info taskReq.TasksSearch) (li
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.MustGetGlobalDBByDBName("market").Model(&task.Tasks{}).Where("is_deleted = 0")
+	db := global.MustGetGlobalDBByDBName("market").Model(&task.Tasks{}).Where("is_deleted = 0").Debug()
 	var taskss []task.Tasks
 	// 如果有条件搜索 下方会自动创建搜索语句
+	if info.UserId != "" {
+		db = db.Where("user_id = ?", info.UserId)
+	}
 	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
-		db = db.Where(" and created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
+		db = db.Where(" created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
 	}
 	err = db.Count(&total).Error
 	if err != nil {
