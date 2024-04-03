@@ -21,6 +21,8 @@ type Orders struct {
 	PayTime       string    `json:"payTime" form:"payTime" gorm:"column:pay_time;comment:支付时间;size:19;"`           //支付时间
 	CreatedAt     time.Time // 创建时间
 	IsDeleted     int       `json:"is_deleted" form:"is_deleted" gorm:"column:is_deleted;comment:是否删除,1已删除,0正常;"` //是否删除,1已删除,0正常
+	RefundTime    int64     `json:"refund_time" form:"refund_time" gorm:"column:refund_time;comment:退费时间;"`       //退费时间
+	RefundTimeStr string    `json:"refund_time_str" gorm:"-"`
 }
 
 // TableName zmOrder表 Orders自定义表名 zm_order

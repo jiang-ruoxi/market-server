@@ -1,21 +1,34 @@
 package order
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/order"
 	orderReq "github.com/flipped-aurora/gin-vue-admin/server/model/order/request"
+	"io/ioutil"
+	"net/http"
+	"time"
 )
 
 type OrdersService struct {
 }
 
 //RefundOrders 退费操作
-func (ordersService *OrdersService) RefundOrders(id int) (orders order.Orders, err error) {
+func (ordersService *OrdersService) RefundOrders(id int) (code int, message string) {
 	//var s order.Orders
 	fmt.Printf("退费的id:%#v \n", id)
-	//这里发起http请求，请求api的退费接口
+
+	//根据订单id查询订单信息
+	orderInfo, _ := ordersService.GetOrders(id)
+	if orderInfo.ID > 0 {
+		//判断有效期-根据类型 todo
+		//此处直接发起退款操作
+		code, message = ordersService.sendHttpPostData(*orderInfo.OrderId)
+		return
+	}
 	return
 }
 
@@ -41,6 +54,9 @@ func (ordersService *OrdersService) GetOrders(id int) (orders order.Orders, err 
 	payOPrice := *orders.OPrice / 100
 	orders.CPrice = &payCPrice
 	orders.OPrice = &payOPrice
+	TimeLocation, _ := time.LoadLocation("Asia/Shanghai") //指定时区
+	dateTime := time.Unix(orders.RefundTime, 0).In(TimeLocation).Format("2006-01-02 15:04:05")
+	orders.RefundTimeStr = dateTime
 	return
 }
 
@@ -76,4 +92,60 @@ func (ordersService *OrdersService) GetOrdersInfoList(info orderReq.OrdersSearch
 	}
 
 	return orderss, total, err
+}
+
+//sendHttpPostData 发起请求
+func (ordersService *OrdersService) sendHttpPostData(orderId int) (code int, message string) {
+	// 要发送的数据
+	postBody, _ := json.Marshal(map[string]int{
+		"order_id": orderId,
+	})
+
+	// 将数据转换为字节序列
+	requestBody := bytes.NewBuffer(postBody)
+
+	// 创建请求
+	req, err := http.NewRequest("POST", "https://market.58haha.com/api/wechat/pay/refunds", requestBody)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// 设置请求头信息，指定内容类型为JSON
+	req.Header.Set("Content-Type", "application/json")
+
+	// 执行请求
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer resp.Body.Close()
+
+	// 读取响应体
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	type RefundsGenerated struct {
+		Code int    `json:"code"`
+		Msg  string `json:"msg"`
+		Data struct {
+			Code    int    `json:"code"`
+			Message string `json:"message"`
+		} `json:"data"`
+	}
+	var refund RefundsGenerated
+	json.Unmarshal(body, &refund)
+
+	fmt.Printf("%#v \n", refund)
+	fmt.Printf("%#v \n", refund.Data.Code)
+	fmt.Printf("%#v \n", refund.Data.Message)
+	//{"code":10000,"msg":"success","data":{"code":200,"message":"success"}}
+	fmt.Println(string(body))
+
+	return refund.Data.Code, refund.Data.Message
 }

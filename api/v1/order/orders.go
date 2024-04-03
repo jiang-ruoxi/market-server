@@ -24,12 +24,8 @@ func (ordersApi *OrdersApi) RefundOrders(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if reorders, err := ordersService.RefundOrders(orders.ID); err != nil {
-		global.GVA_LOG.Error("退费失败!", zap.Error(err))
-		response.FailWithMessage("退费失败", c)
-	} else {
-		response.OkWithData(gin.H{"reorders": reorders}, c)
-	}
+	code, message := ordersService.RefundOrders(orders.ID)
+	response.OkWithData(gin.H{"code": code, "message": message}, c)
 }
 
 // DeleteOrders 删除zmOrder表

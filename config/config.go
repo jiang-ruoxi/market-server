@@ -29,4 +29,7 @@ type Server struct {
 
 	// 跨域配置
 	Cors CORS `mapstructure:"cors" json:"cors" yaml:"cors"`
+
+	//微信相关
+	WxPay WxPay `mapstructure:"wx-pay" json:"wx-pay" yaml:"wx-pay"`
 }
