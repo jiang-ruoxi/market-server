@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/flipped-aurora/gin-vue-admin/server/router/address"
 	"github.com/flipped-aurora/gin-vue-admin/server/router/bad"
 	"github.com/flipped-aurora/gin-vue-admin/server/router/banner"
 	"github.com/flipped-aurora/gin-vue-admin/server/router/example"
@@ -24,6 +25,7 @@ type RouterGroup struct {
 	Member  member.RouterGroup
 	Task    task.RouterGroup
 	Bad     bad.RouterGroup
+	Address address.RouterGroup
 }
 
 var RouterGroupApp = new(RouterGroup)

@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"github.com/flipped-aurora/gin-vue-admin/server/api/v1/address"
 	"github.com/flipped-aurora/gin-vue-admin/server/api/v1/bad"
 	"github.com/flipped-aurora/gin-vue-admin/server/api/v1/banner"
 	"github.com/flipped-aurora/gin-vue-admin/server/api/v1/example"
@@ -24,6 +25,7 @@ type ApiGroup struct {
 	MemberApiGroup  member.ApiGroup
 	TaskApiGroup    task.ApiGroup
 	BadApiGroup     bad.ApiGroup
+	AddressApiGroup address.ApiGroup
 }
 
 var ApiGroupApp = new(ApiGroup)

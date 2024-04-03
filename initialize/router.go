@@ -113,6 +113,10 @@ func Routers() *gin.Engine {
 		badRouter := router.RouterGroupApp.Bad
 		badRouter.InitBadWordsRouter(PrivateGroup)
 	}
+	{
+		addressRouter := router.RouterGroupApp.Address
+		addressRouter.InitAddressRouter(PrivateGroup)
+	}
 
 	global.GVA_LOG.Info("router register success")
 	return Router
