@@ -1,6 +1,7 @@
 package address
 
 import (
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/address"
 	addressReq "github.com/flipped-aurora/gin-vue-admin/server/model/address/request"
@@ -12,6 +13,11 @@ type AddressService struct {
 
 // CreateAddress 创建zmAddress表记录
 func (zmAddressService *AddressService) CreateAddress(zmAddress *address.Address) (err error) {
+	fmt.Printf("zmAddress:%#v \n",zmAddress.IsHot)
+	if zmAddress.IsHot == nil {
+		boolValue := false
+		zmAddress.IsHot = &boolValue
+	}
 	err = global.MustGetGlobalDBByDBName("market").Create(zmAddress).Error
 	return err
 }
