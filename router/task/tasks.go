@@ -15,8 +15,10 @@ func (s *TasksRouter) InitTasksRouter(Router *gin.RouterGroup) {
 	tasksRouterWithoutRecord := Router.Group("tasks")
 	var tasksApi = v1.ApiGroupApp.TaskApiGroup.TasksApi
 	{
+		tasksRouter.POST("createTasks", tasksApi.CreateTasks)   // 新建zmTask表
 		tasksRouter.DELETE("deleteTasks", tasksApi.DeleteTasks) // 删除zmTask表
 		tasksRouter.DELETE("deleteTasksByIds", tasksApi.DeleteTasksByIds) // 批量删除zmTask表
+		tasksRouter.PUT("updateTasks", tasksApi.UpdateTasks)    // 更新zmTask表
 	}
 	{
 		tasksRouterWithoutRecord.GET("findTasks", tasksApi.FindTasks)        // 根据ID获取zmTask表

@@ -6,9 +6,24 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/tag"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/task"
 	taskReq "github.com/flipped-aurora/gin-vue-admin/server/model/task/request"
+	"time"
 )
 
 type TasksService struct {
+}
+
+// CreateTasks 创建zmTask表记录
+func (tasksService *TasksService) CreateTasks(tasks *task.Tasks) (err error) {
+	tasks.Status = 1
+	tasks.AddTime = time.Now().Unix()
+	err = global.MustGetGlobalDBByDBName("market").Create(tasks).Error
+	return err
+}
+
+// UpdateTasks 更新zmTask表记录
+func (tasksService *TasksService) UpdateTasks(tasks task.Tasks) (err error) {
+	err = global.MustGetGlobalDBByDBName("market").Save(&tasks).Error
+	return err
 }
 
 // DeleteTasks 删除zmTask表记录
@@ -45,7 +60,7 @@ func (tasksService *TasksService) GetTasksInfoList(info taskReq.TasksSearch) (li
 	db := global.MustGetGlobalDBByDBName("market").Model(&task.Tasks{}).Where("is_deleted = 0").Debug()
 	var taskss []task.Tasks
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.UserId != "" {
+	if info.UserId > 0 {
 		db = db.Where("user_id = ?", info.UserId)
 	}
 	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
