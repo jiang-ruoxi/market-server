@@ -177,3 +177,14 @@ func (zmAddressApi *AddressApi) GetAddressAllList(c *gin.Context) {
 		}, "获取成功", c)
 	}
 }
+
+func (zmAddressApi *AddressApi) GetAddressChildList(c *gin.Context) {
+	if list, err := zmAddressService.GetAddressChildList(); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+		}, "获取成功", c)
+	}
+}
