@@ -65,3 +65,10 @@ func (zmAddressService *AddressService) GetAddressInfoList(info addressReq.Addre
 	err = db.Find(&zmAddresss).Error
 	return zmAddresss, total, err
 }
+
+// GetAddressAllList
+func (zmAddressService *AddressService) GetAddressAllList() (list []address.Address, err error) {
+	db := global.MustGetGlobalDBByDBName("market").Model(&address.Address{}).Debug().Where("is_deleted= 0 and parent_id = 0")
+	err = db.Find(&list).Error
+	return list, err
+}

@@ -23,5 +23,6 @@ func (s *AddressRouter) InitAddressRouter(Router *gin.RouterGroup) {
 	{
 		zmAddressRouterWithoutRecord.GET("findAddress", zmAddressApi.FindAddress)        // 根据ID获取zmAddress表
 		zmAddressRouterWithoutRecord.GET("getAddressList", zmAddressApi.GetAddressList)  // 获取zmAddress表列表
+		zmAddressRouterWithoutRecord.GET("getAddressAllList", zmAddressApi.GetAddressAllList)  // 获取zmAddress表列表
 	}
 }

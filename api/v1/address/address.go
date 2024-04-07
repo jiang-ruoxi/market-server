@@ -2,13 +2,13 @@ package address
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/address"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-    addressReq "github.com/flipped-aurora/gin-vue-admin/server/model/address/request"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-    "github.com/flipped-aurora/gin-vue-admin/server/service"
-    "github.com/gin-gonic/gin"
-    "go.uber.org/zap"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/address"
+	addressReq "github.com/flipped-aurora/gin-vue-admin/server/model/address/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type AddressApi struct {
@@ -164,4 +164,16 @@ func (zmAddressApi *AddressApi) GetAddressList(c *gin.Context) {
             PageSize: pageInfo.PageSize,
         }, "获取成功", c)
     }
+}
+
+
+func (zmAddressApi *AddressApi) GetAddressAllList(c *gin.Context) {
+	if list, err := zmAddressService.GetAddressAllList(); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+		}, "获取成功", c)
+	}
 }
