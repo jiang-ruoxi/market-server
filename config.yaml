@@ -52,11 +52,11 @@ cors:
 db-list:
     - disable: false
       type: "mysql"
-      alias-name: "market"
+      alias-name: "api"
       path: "127.0.0.1"
       port: "3306"
       config: "charset=utf8mb4&parseTime=True&loc=Local"
-      db-name: "market"
+      db-name: "market-api"
       username: "root"
       password: "123456"
       prefix: ""
@@ -122,7 +122,7 @@ mysql:
     prefix: ""
     port: "3306"
     config: charset=utf8mb4&parseTime=True&loc=Local
-    db-name: market
+    db-name: market-server
     username: root
     password: "123456"
     path: 127.0.0.1

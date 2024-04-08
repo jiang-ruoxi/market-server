@@ -35,20 +35,20 @@ func (ordersService *OrdersService) RefundOrders(id int) (code int, message stri
 // DeleteOrders 删除zmOrder表记录
 func (ordersService *OrdersService) DeleteOrders(orders order.Orders) (err error) {
 	var s order.Orders
-	err = global.MustGetGlobalDBByDBName("market").Model(&s).Debug().Where("id=?", orders.ID).Update("is_deleted", 1).Error
+	err = global.MustGetGlobalDBByDBName("api").Model(&s).Debug().Where("id=?", orders.ID).Update("is_deleted", 1).Error
 	return err
 }
 
 // DeleteOrdersByIds 批量删除zmOrder表记录
 func (ordersService *OrdersService) DeleteOrdersByIds(ids request.IdsReq) (err error) {
 	var s order.Orders
-	err = global.MustGetGlobalDBByDBName("market").Model(&s).Debug().Where("id IN ?", ids.Ids).Updates(&order.Orders{IsDeleted: 1}).Error
+	err = global.MustGetGlobalDBByDBName("api").Model(&s).Debug().Where("id IN ?", ids.Ids).Updates(&order.Orders{IsDeleted: 1}).Error
 	return err
 }
 
 // GetOrders 根据id获取zmOrder表记录
 func (ordersService *OrdersService) GetOrders(id int) (orders order.Orders, err error) {
-	err = global.MustGetGlobalDBByDBName("market").Where("id = ?", id).First(&orders).Error
+	err = global.MustGetGlobalDBByDBName("api").Where("id = ?", id).First(&orders).Error
 
 	payCPrice := *orders.CPrice / 100
 	payOPrice := *orders.OPrice / 100
@@ -65,7 +65,7 @@ func (ordersService *OrdersService) GetOrdersInfoList(info orderReq.OrdersSearch
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.MustGetGlobalDBByDBName("market").Model(&order.Orders{}).Where("is_deleted = 0").Debug()
+	db := global.MustGetGlobalDBByDBName("api").Model(&order.Orders{}).Where("is_deleted = 0").Debug()
 	var orderss []order.Orders
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.UserId != nil && *info.UserId > 0 {

@@ -12,33 +12,33 @@ type TagsService struct {
 
 // CreateTags 创建zm_tags表记录
 func (tagsService *TagsService) CreateTags(tags *tag.Tags) (err error) {
-	err = global.MustGetGlobalDBByDBName("market").Create(tags).Error
+	err = global.MustGetGlobalDBByDBName("api").Create(tags).Error
 	return err
 }
 
 // DeleteTags 删除zm_tags表记录
 func (tagsService *TagsService) DeleteTags(tags tag.Tags) (err error) {
 	var s tag.Tags
-	err = global.MustGetGlobalDBByDBName("market").Model(&s).Debug().Where("id=?", tags.ID).Update("is_deleted", 1).Error
+	err = global.MustGetGlobalDBByDBName("api").Model(&s).Debug().Where("id=?", tags.ID).Update("is_deleted", 1).Error
 	return err
 }
 
 // DeleteTagsByIds 批量删除zm_tags表记录
 func (tagsService *TagsService) DeleteTagsByIds(ids request.IdsReq) (err error) {
 	var s tag.Tags
-	err = global.MustGetGlobalDBByDBName("market").Model(&s).Debug().Where("id IN ?", ids.Ids).Updates(&tag.Tags{IsDeleted: 1}).Error
+	err = global.MustGetGlobalDBByDBName("api").Model(&s).Debug().Where("id IN ?", ids.Ids).Updates(&tag.Tags{IsDeleted: 1}).Error
 	return err
 }
 
 // UpdateTags 更新zm_tags表记录
 func (tagsService *TagsService) UpdateTags(tags tag.Tags) (err error) {
-	err = global.MustGetGlobalDBByDBName("market").Save(&tags).Error
+	err = global.MustGetGlobalDBByDBName("api").Save(&tags).Error
 	return err
 }
 
 // GetTags 根据id获取zm_tags表记录
 func (tagsService *TagsService) GetTags(id int) (tags tag.Tags, err error) {
-	err = global.MustGetGlobalDBByDBName("market").Where("id = ?", id).First(&tags).Error
+	err = global.MustGetGlobalDBByDBName("api").Where("id = ?", id).First(&tags).Error
 	return
 }
 
@@ -47,7 +47,7 @@ func (tagsService *TagsService) GetTagsInfoList(info tagReq.TagsSearch) (list []
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.MustGetGlobalDBByDBName("market").Model(&tag.Tags{}).Where("is_deleted = 0")
+	db := global.MustGetGlobalDBByDBName("api").Model(&tag.Tags{}).Where("is_deleted = 0")
 	var tagss []tag.Tags
 	err = db.Count(&total).Error
 	if err != nil {
@@ -64,7 +64,7 @@ func (tagsService *TagsService) GetTagsInfoList(info tagReq.TagsSearch) (list []
 
 // GetTagsInfoList 分页获取zm_tags表记录
 func (tagsService *TagsService) GetTagsInfoListAll() (list []tag.Tags, err error) {
-	db := global.MustGetGlobalDBByDBName("market").Model(&tag.Tags{})
+	db := global.MustGetGlobalDBByDBName("api").Model(&tag.Tags{})
 	var tagss []tag.Tags
 
 	err = db.Find(&tagss).Error

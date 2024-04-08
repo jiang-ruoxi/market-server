@@ -18,14 +18,6 @@ var zmAddressService = service.ServiceGroupApp.AddressServiceGroup.AddressServic
 
 
 // CreateAddress 创建zmAddress表
-// @Tags Address
-// @Summary 创建zmAddress表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body address.Address true "创建zmAddress表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
-// @Router /zmAddress/createAddress [post]
 func (zmAddressApi *AddressApi) CreateAddress(c *gin.Context) {
 	var zmAddress address.Address
 	err := c.ShouldBindJSON(&zmAddress)
@@ -42,14 +34,6 @@ func (zmAddressApi *AddressApi) CreateAddress(c *gin.Context) {
 }
 
 // DeleteAddress 删除zmAddress表
-// @Tags Address
-// @Summary 删除zmAddress表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body address.Address true "删除zmAddress表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /zmAddress/deleteAddress [delete]
 func (zmAddressApi *AddressApi) DeleteAddress(c *gin.Context) {
 	var zmAddress address.Address
 	err := c.ShouldBindJSON(&zmAddress)
@@ -66,14 +50,6 @@ func (zmAddressApi *AddressApi) DeleteAddress(c *gin.Context) {
 }
 
 // DeleteAddressByIds 批量删除zmAddress表
-// @Tags Address
-// @Summary 批量删除zmAddress表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body request.IdsReq true "批量删除zmAddress表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"批量删除成功"}"
-// @Router /zmAddress/deleteAddressByIds [delete]
 func (zmAddressApi *AddressApi) DeleteAddressByIds(c *gin.Context) {
 	var IDS request.IdsReq
     err := c.ShouldBindJSON(&IDS)
@@ -90,14 +66,6 @@ func (zmAddressApi *AddressApi) DeleteAddressByIds(c *gin.Context) {
 }
 
 // UpdateAddress 更新zmAddress表
-// @Tags Address
-// @Summary 更新zmAddress表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body address.Address true "更新zmAddress表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /zmAddress/updateAddress [put]
 func (zmAddressApi *AddressApi) UpdateAddress(c *gin.Context) {
 	var zmAddress address.Address
 	err := c.ShouldBindJSON(&zmAddress)
@@ -114,14 +82,6 @@ func (zmAddressApi *AddressApi) UpdateAddress(c *gin.Context) {
 }
 
 // FindAddress 用id查询zmAddress表
-// @Tags Address
-// @Summary 用id查询zmAddress表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data query address.Address true "用id查询zmAddress表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
-// @Router /zmAddress/findAddress [get]
 func (zmAddressApi *AddressApi) FindAddress(c *gin.Context) {
 	var zmAddress address.Address
 	err := c.ShouldBindQuery(&zmAddress)
@@ -138,14 +98,6 @@ func (zmAddressApi *AddressApi) FindAddress(c *gin.Context) {
 }
 
 // GetAddressList 分页获取zmAddress表列表
-// @Tags Address
-// @Summary 分页获取zmAddress表列表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data query addressReq.AddressSearch true "分页获取zmAddress表列表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /zmAddress/getAddressList [get]
 func (zmAddressApi *AddressApi) GetAddressList(c *gin.Context) {
 	var pageInfo addressReq.AddressSearch
 	err := c.ShouldBindQuery(&pageInfo)

@@ -18,33 +18,33 @@ func (zmAddressService *AddressService) CreateAddress(zmAddress *address.Address
 		boolValue := false
 		zmAddress.IsHot = &boolValue
 	}
-	err = global.MustGetGlobalDBByDBName("market").Create(zmAddress).Error
+	err = global.MustGetGlobalDBByDBName("api").Create(zmAddress).Error
 	return err
 }
 
 // DeleteAddress 删除zmAddress表记录
 func (zmAddressService *AddressService) DeleteAddress(zmAddress address.Address) (err error) {
 	var s address.Address
-	err = global.MustGetGlobalDBByDBName("market").Model(&s).Debug().Where("id=?", zmAddress.ID).Update("is_deleted", 1).Error
+	err = global.MustGetGlobalDBByDBName("api").Model(&s).Debug().Where("id=?", zmAddress.ID).Update("is_deleted", 1).Error
 	return err
 }
 
 // DeleteAddressByIds 批量删除zmAddress表记录
 func (zmAddressService *AddressService) DeleteAddressByIds(ids request.IdsReq) (err error) {
 	var s address.Address
-	err = global.MustGetGlobalDBByDBName("market").Model(&s).Debug().Where("id IN ?", ids.Ids).Updates(&address.Address{IsDeleted: 1}).Error
+	err = global.MustGetGlobalDBByDBName("api").Model(&s).Debug().Where("id IN ?", ids.Ids).Updates(&address.Address{IsDeleted: 1}).Error
 	return err
 }
 
 // UpdateAddress 更新zmAddress表记录
 func (zmAddressService *AddressService) UpdateAddress(zmAddress address.Address) (err error) {
-	err = global.MustGetGlobalDBByDBName("market").Save(&zmAddress).Error
+	err = global.MustGetGlobalDBByDBName("api").Save(&zmAddress).Error
 	return err
 }
 
 // GetAddress 根据id获取zmAddress表记录
 func (zmAddressService *AddressService) GetAddress(id int) (zmAddress address.Address, err error) {
-	err = global.MustGetGlobalDBByDBName("market").Where("id = ?", id).First(&zmAddress).Error
+	err = global.MustGetGlobalDBByDBName("api").Where("id = ?", id).First(&zmAddress).Error
 	return
 }
 
@@ -53,7 +53,7 @@ func (zmAddressService *AddressService) GetAddressInfoList(info addressReq.Addre
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.MustGetGlobalDBByDBName("market").Model(&address.Address{}).Where("is_deleted=0")
+	db := global.MustGetGlobalDBByDBName("api").Model(&address.Address{}).Where("is_deleted=0")
 	var zmAddresss []address.Address
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
@@ -74,14 +74,14 @@ func (zmAddressService *AddressService) GetAddressInfoList(info addressReq.Addre
 
 // GetAddressAllList
 func (zmAddressService *AddressService) GetAddressAllList() (list []address.Address, err error) {
-	db := global.MustGetGlobalDBByDBName("market").Model(&address.Address{}).Debug().Where("is_deleted= 0 and parent_id = 0")
+	db := global.MustGetGlobalDBByDBName("api").Model(&address.Address{}).Debug().Where("is_deleted= 0 and parent_id = 0")
 	err = db.Find(&list).Error
 	return list, err
 }
 
 // GetAddressChildList
 func (zmAddressService *AddressService) GetAddressChildList() (list []address.Address, err error) {
-	db := global.MustGetGlobalDBByDBName("market").Model(&address.Address{}).Debug().Where("is_deleted= 0 and parent_id > 0")
+	db := global.MustGetGlobalDBByDBName("api").Model(&address.Address{}).Debug().Where("is_deleted= 0 and parent_id > 0")
 	err = db.Find(&list).Error
 	return list, err
 }
