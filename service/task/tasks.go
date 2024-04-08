@@ -2,6 +2,7 @@ package task
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/address"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/tag"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/task"
@@ -45,10 +46,13 @@ func (tasksService *TasksService) GetTasks(id int) (tasks task.Tasks, err error)
 	err = global.MustGetGlobalDBByDBName("market").Where("id = ?", id).First(&tasks).Error
 
 	var tagInfo tag.Tags
-	db1 := global.MustGetGlobalDBByDBName("market").Model(&tag.Tags{})
-	db1.Where("id=?", tasks.TagId).First(&tagInfo)
+	global.MustGetGlobalDBByDBName("market").Model(&tag.Tags{}).Where("id=?", tasks.TagId).First(&tagInfo)
+
+	var addressInfo address.Address
+	global.MustGetGlobalDBByDBName("market").Model(&address.Address{}).Where("id=?", tasks.AddressId).First(&addressInfo)
 
 	tasks.TagName = tagInfo.Name
+	tasks.Address = addressInfo.Name
 	return
 }
 
