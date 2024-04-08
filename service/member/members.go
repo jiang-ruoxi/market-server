@@ -64,5 +64,14 @@ func (membersService *MembersService) GetMembersInfoList(info memberReq.MembersS
 	}
 
 	err = db.Order("id desc").Find(&memberss).Error
+
+	for idx,_:= range memberss{
+		if memberss[idx].HeadUrl == "" {
+			memberss[idx].HeadUrl = "https://oss.58haha.com/style/market/default.png"
+		}
+		if memberss[idx].NickName == "" {
+			memberss[idx].NickName = "-"
+		}
+	}
 	return memberss, total, err
 }
